@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EntryPoint
 {
@@ -31,9 +32,25 @@ namespace EntryPoint
                 {
                     options.SignInScheme = "Cookies";
                     options.Authority = "http://localhost:5000";
-                    options.RequireHttpsMetadata = false;
+
                     options.ClientId = "mvc";
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code id_token";
                     options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+
+                    options.RequireHttpsMetadata = false;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
+
+                    options.Scope.Clear();
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("api1");
                 });
         }
 
@@ -49,6 +66,7 @@ namespace EntryPoint
             {
                 app.UseExceptionHandler("/Error");
             }
+
 
             app.UseAuthentication();
 
