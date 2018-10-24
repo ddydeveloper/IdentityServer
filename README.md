@@ -1,2 +1,3 @@
 # IdentityServer
-SSO with IdentityServer4
+
+A set of projects to understand the SSO and IdentityServer4 principles
